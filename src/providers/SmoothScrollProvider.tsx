@@ -15,11 +15,16 @@ gsap.registerPlugin(ScrollTrigger)
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const reduced = usePrefersReducedMotion()
   const lenisRef = useRef<Lenis | null>(null)
+  const fallbackOverflow = useRef<string | null>(null)
 
   useEffect(() => {
     if (reduced) return
 
-    const lenis = new Lenis({ duration: 1.05, smoothWheel: true })
+    const lenis = new Lenis({
+      duration: 1.05,
+      smoothWheel: true,
+      syncTouch: false,
+    })
     lenisRef.current = lenis
 
     lenis.on('scroll', ScrollTrigger.update)
@@ -51,14 +56,17 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
           lenisRef.current.stop()
           return
         }
+        if (fallbackOverflow.current === null) {
+          fallbackOverflow.current = document.documentElement.style.overflow
+        }
         document.documentElement.style.overflow = 'hidden'
       },
       start: () => {
-        if (lenisRef.current) {
-          lenisRef.current.start()
-          return
+        lenisRef.current?.start()
+        if (fallbackOverflow.current !== null) {
+          document.documentElement.style.overflow = fallbackOverflow.current
+          fallbackOverflow.current = null
         }
-        document.documentElement.style.overflow = ''
       },
     }),
     [],

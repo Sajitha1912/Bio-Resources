@@ -46,6 +46,7 @@ export function CardCanvas() {
         height: "100%",
         pointerEvents: "none",
         zIndex: 35,
+        touchAction: "pan-y",
       }}
     >
       <View.Port />

@@ -458,6 +458,7 @@ export default function DNAHelix3D({
       camera={{ position: [0, 0, cameraZ], fov: 45 }}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       className={interactive ? 'dna-helix' : undefined}
+      style={{ touchAction: 'pan-y' }}
     >
       <Frameloop paused={paused} />
 
