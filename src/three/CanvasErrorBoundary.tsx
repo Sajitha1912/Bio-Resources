@@ -12,12 +12,7 @@ export class CanvasErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-<<<<<<< HEAD
     console.error('3D scene failed to render:', error, info)
-=======
-    // Keep the console useful for debugging without breaking the UI.
-    console.warn('3D scene failed to render:', error, info)
->>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
   }
 
   render() {

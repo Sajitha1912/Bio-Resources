@@ -32,13 +32,8 @@ const RUNGS = Array.from({ length: 13 }, (_, i) => {
 })
 
 /**
-<<<<<<< HEAD
  * Code-drawn SVG stand-in for the WebGL helix. Used when WebGL2 is unavailable
  * or the WebGL context is lost.
-=======
- * Code-drawn SVG stand-in for the WebGL helix. Used on mobile, low-power
- * devices, under reduced motion and whenever WebGL fails to initialise.
->>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
  */
 export function HelixFallback({ className }: { className?: string }) {
   const reduced = usePrefersReducedMotion()
