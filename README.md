@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bio Resources Pvt Ltd
 
 Marketing website for **Bio Resources Pvt Ltd** — a life-sciences research
@@ -234,3 +235,6 @@ Replace/confirm everything marked `// VERIFY:` in the code. See
 - [ ] Confirm the legal business name, full postal address, country and opening
       hours used in the `LocalBusiness` structured data.
 - [ ] Optionally add a social preview image and pass it to `useSeo({ image })`.
+=======
+# Bio-Resources
+>>>>>>> 8836909b48bef7ef6416dd14d0f880dcfea87f4e

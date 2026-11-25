@@ -38,6 +38,14 @@ export type Segment = {
 
 export type ToggleTab = { id: string; label: string };
 
+export type Location = {
+  label: string;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  mapsUrl: string;
+};
+
 /**
  * A named technique or method.
  * `description` is optional because the marquee, the core-strength chips and
@@ -54,6 +62,15 @@ export type Technique = {
 export type ServiceMedia =
   | { type?: "image"; src: string; alt: string }
   | { type: "video"; src: string; poster: string; alt: string };
+
+export type FocusArea = {
+  icon: string;
+  title: string;
+  description?: string;
+  media?:
+    | { type?: "image"; src: string; alt: string }
+    | { type: "video"; src: string; alt: string };
+};
 
 export type Service = {
   /** URL segment: /services/:slug */
