@@ -1,0 +1,8 @@
+# robots.txt for Bio Resources Pvt Ltd
+# VERIFY: replace the domain in the Sitemap line with the production domain
+# (must match company.url in src/data/site.ts).
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.example.com/sitemap.xml

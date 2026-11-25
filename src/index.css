@@ -1,0 +1,795 @@
+@import "tailwindcss";
+
+/*
+ * The site is dark-only. The `.dark` class is set statically on <html> in
+ * index.html so the `dark:` utilities still resolve; there is no light theme
+ * and no runtime theme switching.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens (Tailwind v4 CSS-first config)
+   Brand palette: forest green, lime, teal, cream, charcoal.
+--------------------------------------------------------------------------- */
+@theme {
+  --font-heading: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-body:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-forest: #0f3d2e;
+  --color-forest-deep: #072019;
+  --color-lime: #7bc74d;
+  --color-teal: #1b8a7a;
+  --color-cream: #f7f5ef;
+  --color-charcoal: #1b1f1d;
+
+  --ease-boutique: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Semantic surface tokens. Dark is the only theme, so these are the defaults. */
+:root {
+  --bg: #071411;
+  --fg: #f7f5ef;
+  --fg-muted: #a7b7b0;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border: rgba(247, 245, 239, 0.12);
+  --ring: #7bc74d;
+  --accent: #7bc74d;
+  --grain-opacity: 0.055;
+
+  color-scheme: dark;
+}
+
+/* Expose the semantic tokens as Tailwind utilities (bg-bg, text-fg, ...). */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-line: var(--border);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+}
+
+@layer base {
+  html,
+  body {
+    cursor: auto;
+  }
+
+  a,
+  button {
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    /* Dark scrollbars (Firefox). */
+    scrollbar-color: color-mix(in srgb, var(--fg) 24%, transparent) var(--bg);
+    scrollbar-width: thin;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* `clip` (not `hidden`) so ancestors never become a scroll container —
+       which would break GSAP ScrollTrigger pinning. */
+    overflow-x: clip;
+  }
+
+  /* Dark scrollbars (WebKit/Blink). */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--fg) 20%, transparent);
+    border: 3px solid var(--bg);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--fg) 32%, transparent);
+  }
+
+  /* Keep autofilled fields on-theme instead of Chrome's default light yellow. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--fg);
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+    box-shadow: 0 0 0 1000px var(--bg) inset;
+    caret-color: var(--fg);
+    transition: background-color 9999s ease-out 0s;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-lime) 55%, transparent);
+    color: var(--color-forest-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Film-grain overlay — rendered once by the layout. Pure CSS + inline SVG,
+   no hotlinked assets.
+--------------------------------------------------------------------------- */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  animation: grain-shift 9s steps(6) infinite;
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-2%, 1%, 0);
+  }
+  50% {
+    transform: translate3d(1%, -2%, 0);
+  }
+  75% {
+    transform: translate3d(-1%, 2%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Giant outlined footer wordmark that fills with colour on scroll. */
+.wordmark-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 55%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Home decorations — idle float for motifs + the infinite techniques marquee.
+--------------------------------------------------------------------------- */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.float-y {
+  animation: float-y 7s ease-in-out infinite;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-x 32s linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-y,
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Focus-area illustrations — small looping motions for the inline SVGs.
+--------------------------------------------------------------------------- */
+.il-origin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes il-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes il-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes il-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes il-dash {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+.il-float {
+  animation: il-float 6s ease-in-out infinite;
+}
+
+.il-pulse {
+  animation: il-pulse 2.6s ease-in-out infinite;
+}
+
+.il-spin {
+  animation: il-spin 12s linear infinite;
+}
+
+.il-dash {
+  animation: il-dash 1.6s linear infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Technique chips — a small looping wobble on the chip icons. Applied to
+   inline <svg> icons (lucide) rather than whole illustrations.
+--------------------------------------------------------------------------- */
+@keyframes chip-icon {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-6deg);
+  }
+}
+
+.chip-icon {
+  animation: chip-icon 3.6s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Page background system — faint honeycomb cells that pulse in a wave, plus a
+   reusable noise tile. Per-cell `animation-delay` (set inline) staggers the
+   pulse into a slow diagonal sweep. Neutralised under reduced motion by the
+   global rule at the bottom of this file.
+--------------------------------------------------------------------------- */
+@keyframes bg-hex-pulse {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+.bg-hex-cell {
+  animation: bg-hex-pulse 7s ease-in-out infinite;
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* ---------------------------------------------------------------------------
+   Embedded maps — Google's iframe has no dark mode, so this light inversion
+   keeps it from glaring white against the dark UI.
+--------------------------------------------------------------------------- */
+.map-frame {
+  filter: invert(0.9) hue-rotate(180deg) saturate(0.85) contrast(0.95);
+}
+
+/* ---------------------------------------------------------------------------
+   Interactive 3D helix — drei's OrbitControls writes an inline
+   `touch-action: none` onto the canvas, which would swallow vertical page
+   scrolling on touch devices. An author rule with `!important` outranks the
+   inline declaration, so vertical panning keeps working while horizontal drags
+   still reach the controls.
+--------------------------------------------------------------------------- */
+.dna-helix canvas {
+  touch-action: pan-y !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Pause every looping animation while the browser tab is hidden. A `tab-hidden`
+   class is toggled on <html> by the layout (see useDocumentVisible).
+--------------------------------------------------------------------------- */
+.tab-hidden .film-grain,
+.tab-hidden .marquee-track,
+.tab-hidden .float-y,
+.tab-hidden .il-float,
+.tab-hidden .il-pulse,
+.tab-hidden .il-spin,
+.tab-hidden .il-dash,
+.tab-hidden .chip-icon,
+.tab-hidden .bg-hex-cell,
+.tab-hidden .page-hex-glow,
+.tab-hidden .animate-ping {
+  animation-play-state: paused;
+}
+
+/* Respect users who prefer reduced motion everywhere in the app. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .film-grain {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Surface and page-background motion styles.
+--------------------------------------------------------------------------- */
+.page-hex-glow {
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--hex-accent) 18%, transparent),
+    transparent 68%
+  );
+  animation: page-glow-drift 14s ease-in-out infinite;
+}
+
+@keyframes page-glow-drift {
+  0%,
+  100% {
+    transform: translate3d(-3%, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.08);
+  }
+}
+
+.section-soft-glow {
+  background:
+    radial-gradient(
+      circle at 18% 20%,
+      rgba(123, 199, 77, 0.07),
+      transparent 32rem
+    ),
+    radial-gradient(
+      circle at 82% 80%,
+      rgba(27, 138, 122, 0.07),
+      transparent 28rem
+    );
+}
+
+.section-faint-grid {
+  background-image:
+    linear-gradient(rgba(247, 245, 239, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 245, 239, 0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* ---------------------------------------------------------------------------
+   Card 3D loading shimmer effect.
+--------------------------------------------------------------------------- */
+.card-3d-skeleton {
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(123, 199, 77, 0.1),
+      transparent 58%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(247, 245, 239, 0.03) 20%,
+      rgba(247, 245, 239, 0.09) 38%,
+      rgba(247, 245, 239, 0.03) 56%
+    );
+  background-size:
+    100% 100%,
+    220% 100%;
+  animation: card-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes card-shimmer {
+  from {
+    background-position:
+      0 0,
+      180% 0;
+  }
+  to {
+    background-position:
+      0 0,
+      -40% 0;
+  }
+}
+
+.group:hover,
+article.group:hover {
+  background-image: radial-gradient(
+    circle at 50% 42%,
+    rgba(123, 199, 77, 0.18),
+    transparent 62%
+  );
+}
+
+.focus-card-media {
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(123, 199, 77, 0.12),
+      transparent 62%
+    ),
+    #071411;
+  box-shadow: inset 0 0 28px rgba(7, 20, 17, 0.48);
+}
+
+.service-media {
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(123, 199, 77, 0.12),
+      transparent 62%
+    ),
+    #071411;
+  box-shadow: inset 0 0 28px rgba(7, 20, 17, 0.42);
+}
+
+.service-card-image {
+  transform-origin: center;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 72%,
+    rgba(0, 0, 0, 0.92) 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 72%,
+    rgba(0, 0, 0, 0.92) 82%,
+    transparent 100%
+  );
+  filter: saturate(1.04) contrast(1.02);
+}
+
+.service-banner {
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(123, 199, 77, 0.12),
+      transparent 62%
+    ),
+    #071411;
+  box-shadow: inset 0 0 38px rgba(7, 20, 17, 0.42);
+}
+
+.service-card-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 38px rgba(7, 20, 17, 0.58);
+  background: linear-gradient(
+    135deg,
+    rgba(123, 199, 77, 0.06),
+    transparent 42%,
+    rgba(27, 138, 122, 0.05)
+  );
+}
+
+.service-card-shimmer {
+  border-radius: inherit;
+}
+
+.service-card-paused .service-card-shimmer {
+  animation-play-state: paused;
+}
+
+.service-card-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.service-card-bokeh {
+  position: absolute;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: rgba(123, 199, 77, 0.72);
+  box-shadow: 0 0 12px rgba(123, 199, 77, 0.8);
+  animation: service-bokeh-drift 7s ease-in-out infinite;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-card-bokeh-one {
+  left: 14%;
+  top: 22%;
+}
+
+.service-card-bokeh-two {
+  right: 18%;
+  top: 38%;
+  width: 11px;
+  height: 11px;
+  background: rgba(27, 138, 122, 0.78);
+  animation-delay: -2.4s;
+}
+
+.service-card-bokeh-three {
+  left: 68%;
+  bottom: 18%;
+  width: 6px;
+  height: 6px;
+  animation-delay: -4.1s;
+}
+
+@keyframes service-bokeh-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(10px, -14px, 0) scale(1.18);
+    opacity: 0.9;
+  }
+}
+
+.service-card-hovered > a {
+  border-color: rgba(123, 199, 77, 0.5);
+  box-shadow:
+    0 18px 60px rgba(123, 199, 77, 0.12),
+    0 0 38px rgba(27, 138, 122, 0.1);
+}
+
+.service-card-hovered .service-card-bokeh {
+  transform: translate3d(12px, -16px, 0) scale(1.4);
+}
+
+.service-card-hovered .service-card-bokeh-two {
+  transform: translate3d(-14px, -10px, 0) scale(1.4);
+}
+
+.focus-card-image {
+  transform-origin: center;
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 12%,
+      #000 88%,
+      transparent 100%
+    );
+  mask-image:
+    linear-gradient(to bottom, #000 0%, #000 88%, transparent 100%),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 12%,
+      #000 88%,
+      transparent 100%
+    );
+  -webkit-mask-composite: intersect;
+  mask-composite: intersect;
+  filter: saturate(1.04) contrast(1.02);
+}
+
+.focus-card-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 38px rgba(7, 20, 17, 0.58);
+  background: linear-gradient(
+    135deg,
+    rgba(123, 199, 77, 0.06),
+    transparent 42%,
+    rgba(27, 138, 122, 0.05)
+  );
+}
+
+.focus-card-shimmer {
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(123, 199, 77, 0.1),
+      transparent 58%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(247, 245, 239, 0.025) 20%,
+      rgba(247, 245, 239, 0.09) 38%,
+      rgba(247, 245, 239, 0.025) 56%
+    );
+  background-size:
+    100% 100%,
+    220% 100%;
+  animation: focus-card-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes focus-card-shimmer {
+  from {
+    background-position:
+      0 0,
+      180% 0;
+  }
+  to {
+    background-position:
+      0 0,
+      -40% 0;
+  }
+}
+
+.focus-card-glare {
+  position: absolute;
+  inset: -25%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 34%,
+    rgba(247, 245, 239, 0.16) 48%,
+    transparent 62%
+  );
+  transform: translateX(-42%) rotate(8deg);
+  transition:
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease;
+}
+
+.focus-card-hovered .focus-card-glare {
+  transform: translateX(42%) rotate(8deg);
+}
+
+.focus-card-hovered {
+  background-image: radial-gradient(
+    circle at 50% 32%,
+    rgba(123, 199, 77, 0.18),
+    transparent 68%
+  );
+  box-shadow:
+    0 18px 60px rgba(123, 199, 77, 0.12),
+    0 0 38px rgba(27, 138, 122, 0.08);
+}
+
+.focus-bokeh {
+  position: absolute;
+  z-index: 2;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: rgba(123, 199, 77, 0.7);
+  box-shadow: 0 0 12px rgba(123, 199, 77, 0.8);
+  animation: focus-bokeh-drift 7s ease-in-out infinite;
+}
+
+.focus-bokeh-one {
+  left: 14%;
+  top: 22%;
+}
+.focus-bokeh-two {
+  right: 18%;
+  top: 38%;
+  width: 11px;
+  height: 11px;
+  background: rgba(27, 138, 122, 0.72);
+  animation-delay: -2.4s;
+}
+.focus-bokeh-three {
+  left: 68%;
+  bottom: 18%;
+  width: 6px;
+  height: 6px;
+  animation-delay: -4.1s;
+}
+
+@keyframes focus-bokeh-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(10px, -14px, 0) scale(1.18);
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-card-shimmer,
+  .focus-bokeh,
+  .focus-card-glare {
+    animation: none;
+    transition: none;
+  }
+}
+
+.tab-hidden .focus-card-shimmer,
+.tab-hidden .focus-bokeh,
+.tab-hidden .focus-card-glare,
+.tab-hidden .service-card-shimmer,
+.tab-hidden .service-card-bokeh {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-card-shimmer,
+  .service-card-bokeh,
+  .service-card-glare {
+    animation: none;
+    transition: none;
+  }
+}
