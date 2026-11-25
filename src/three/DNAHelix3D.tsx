@@ -19,7 +19,10 @@ import {
   type Group,
   type Mesh,
 } from 'three'
+<<<<<<< HEAD
 import { useIsLowPower } from '@/hooks/useIsLowPower'
+=======
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
 
 /* -------------------------------------------------------------------------- */
 /* Constants                                                                   */
@@ -57,8 +60,11 @@ export type DNAHelix3DProps = {
   progressRef?: { current: number }
   /** Pause the render loop while off-screen or when the tab is hidden. */
   paused?: boolean
+<<<<<<< HEAD
   /** Switch to the SVG fallback when the browser loses the WebGL context. */
   onContextLost?: () => void
+=======
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
 }
 
 /* -------------------------------------------------------------------------- */
@@ -322,10 +328,17 @@ const CLUSTER_BONDS = CLUSTER_OFFSETS.map((offset) => {
   }
 })
 
+<<<<<<< HEAD
 function Molecules({ scale, count }: { scale: number; count: number }) {
   return (
     <>
       {CLUSTER_CENTERS.slice(0, count).map((center, index) => (
+=======
+function Molecules({ scale }: { scale: number }) {
+  return (
+    <>
+      {CLUSTER_CENTERS.map((center, index) => (
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
         <Float
           key={`cluster-${index}`}
           speed={1 + index * 0.16}
@@ -433,6 +446,7 @@ function Frameloop({ paused }: { paused: boolean }) {
   return null
 }
 
+<<<<<<< HEAD
 function WebGLContextLoss({ onContextLost }: { onContextLost?: () => void }) {
   const gl = useThree((state) => state.gl)
 
@@ -450,6 +464,8 @@ function WebGLContextLoss({ onContextLost }: { onContextLost?: () => void }) {
   return null
 }
 
+=======
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
 /* -------------------------------------------------------------------------- */
 /* Component                                                                   */
 /* -------------------------------------------------------------------------- */
@@ -469,21 +485,32 @@ export default function DNAHelix3D({
   steps = 5,
   progressRef,
   paused = false,
+<<<<<<< HEAD
   onContextLost,
 }: DNAHelix3DProps) {
   const lowPower = useIsLowPower()
   const segmentCount = lowPower ? Math.min(pairs, 20) : pairs
+=======
+}: DNAHelix3DProps) {
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
   const cameraZ = height * 1.35 + 1
 
   return (
     <Canvas
       dpr={[1, 1.5]}
       camera={{ position: [0, 0, cameraZ], fov: 45 }}
+<<<<<<< HEAD
       gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
       className={interactive ? 'dna-helix' : undefined}
       style={{ touchAction: 'pan-y' }}
     >
       <WebGLContextLoss onContextLost={onContextLost} />
+=======
+      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      className={interactive ? 'dna-helix' : undefined}
+      style={{ touchAction: 'pan-y' }}
+    >
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
       <Frameloop paused={paused} />
 
       <ambientLight intensity={0.55} />
@@ -492,7 +519,11 @@ export default function DNAHelix3D({
       <pointLight position={[3, 2, 3]} intensity={0.5} color={LIME} />
 
       {/* Subtle environment built in code — no HDR file to download. */}
+<<<<<<< HEAD
       <Environment resolution={lowPower ? 32 : 64} frames={1}>
+=======
+      <Environment resolution={64} frames={1}>
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
         <Lightformer
           intensity={0.7}
           color={LIME}
@@ -516,15 +547,23 @@ export default function DNAHelix3D({
       <PointerTilt>
         <HelixModel
           height={height}
+<<<<<<< HEAD
           pairs={segmentCount}
+=======
+          pairs={pairs}
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
           steps={steps}
           autoRotate={autoRotate}
           interactive={interactive}
           progressRef={progressRef}
         />
+<<<<<<< HEAD
         {molecules ? (
           <Molecules scale={height / 7} count={lowPower ? 3 : 6} />
         ) : null}
+=======
+        {molecules ? <Molecules scale={height / 7} /> : null}
+>>>>>>> e384689851efcff18a3874befa8b5e3ae8fd05ae
       </PointerTilt>
 
       {interactive ? (
