@@ -1,12 +1,20 @@
 import { useState } from 'react'
 
+let webgl2Available: boolean | undefined
+
 function hasWebGL(): boolean {
+  if (webgl2Available !== undefined) return webgl2Available
+
   try {
     const canvas = document.createElement('canvas')
-    return Boolean(canvas.getContext('webgl2'))
+    const context = canvas.getContext('webgl2')
+    webgl2Available = Boolean(context)
+    context?.getExtension('WEBGL_lose_context')?.loseContext()
   } catch {
-    return false
+    webgl2Available = false
   }
+
+  return webgl2Available
 }
 
 /**

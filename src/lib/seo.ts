@@ -14,6 +14,18 @@ export type SeoOptions = {
   image?: string
 }
 
+export function getPageTitle(title: string): string {
+  return title === company.companyName
+    ? `${company.companyName} | Life-Science Research Services`
+    : `${title} | ${company.companyName}`
+}
+
+export function usePageTitle(title: string): void {
+  useEffect(() => {
+    document.title = getPageTitle(title)
+  }, [title])
+}
+
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
   if (!el) {
@@ -40,19 +52,19 @@ export function useSeo({
   path = '/',
   image = company.logo,
 }: SeoOptions): void {
+  usePageTitle(title)
+
   useEffect(() => {
-    const fullTitle =
-      title === company.name ? title : `${title} — ${company.name}`
+    const fullTitle = getPageTitle(title)
     const url = `${company.url}${path}`
 
-    document.title = fullTitle
     upsertMeta('name', 'description', description)
     upsertMeta('name', 'keywords', company.keywords.join(', '))
     upsertMeta('name', 'robots', 'index,follow')
     upsertMeta('property', 'og:title', fullTitle)
     upsertMeta('property', 'og:description', description)
     upsertMeta('property', 'og:type', 'website')
-    upsertMeta('property', 'og:site_name', company.name)
+    upsertMeta('property', 'og:site_name', company.companyName)
     upsertMeta('property', 'og:locale', 'en')
     upsertMeta('property', 'og:url', url)
     upsertMeta('name', 'twitter:card', 'summary_large_image')
@@ -76,5 +88,5 @@ export function useSeo({
       document.head.appendChild(canonical)
     }
     canonical.href = url
-  }, [title, description, path, image])
+  }, [description, path, image, title])
 }

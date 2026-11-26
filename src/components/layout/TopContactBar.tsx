@@ -14,7 +14,10 @@ export function TopContactBar() {
     <div className="hidden border-b border-line/70 md:block">
       <Container>
         <div className="flex h-9 items-center justify-between gap-6 text-xs">
-          <p className="truncate text-fg-muted">{company.tagline}</p>
+          <p className="truncate text-fg-muted">
+            <span>{company.companyName}</span>
+            <span className="hidden lg:inline"> · {company.tagline}</span>
+          </p>
           <div className="flex shrink-0 items-center gap-5">
             {email ? (
               <a

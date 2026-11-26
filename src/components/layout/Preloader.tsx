@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
 import { useSmoothScroll } from '@/providers/smooth-scroll-context'
 import { Logo } from '@/components/ui/Logo'
+import { company } from '@/data/site'
 
 const STRAND_STEPS = 64
 const NODE_COUNT = 10
@@ -186,6 +187,10 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             </div>
           }
         />
+
+        <p className="-mt-5 font-heading text-lg font-medium tracking-tight text-cream sm:text-xl">
+          {company.companyName}
+        </p>
 
         <div className="flex flex-col items-center gap-3">
           <span className="font-heading text-5xl tabular-nums sm:text-6xl">

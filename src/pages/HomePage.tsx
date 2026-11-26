@@ -12,7 +12,11 @@ import { FounderSpotlight } from '@/sections/FounderSpotlight'
 import { FinalCta } from '@/sections/FinalCta'
 
 export function HomePage() {
-  useSeo({ title: company.name, description: company.description, path: '/' })
+  useSeo({
+    title: company.companyName,
+    description: company.description,
+    path: '/',
+  })
 
   return (
     <>

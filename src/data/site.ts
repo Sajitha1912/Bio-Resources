@@ -93,8 +93,8 @@ export type Service = {
 /* -------------------------------------------------------------------------- */
 
 export const company = {
-  name: "Bio Resources Pvt Ltd",
-  shortName: "Bio Resources",
+  companyName: "Bio Resources Pvt Ltd",
+  companyShort: "Bio Resources",
   tagline: "Advanced computational and in vitro research support.",
   description:
     "Life-science research services: cell-based and in vitro studies, computational studies (docking, molecular dynamics, 3D-QSAR, DFT, machine learning, network pharmacology, immunoinformatics and vaccine designing), plus natural-molecule drugs and nanomaterial delivery.",
@@ -211,7 +211,7 @@ export const primaryPhone = contact.channels.find((channel) =>
 /* -------------------------------------------------------------------------- */
 
 export const location: Location = {
-  label: company.name,
+  label: company.companyName,
   // VERIFY: confirm the exact street address.
   address: "Sankagiri, Salem District, Tamil Nadu, India",
   // VERIFY: add the exact latitude and longitude (e.g. 11.4756 / 77.8689).
@@ -658,7 +658,7 @@ export const about = {
     eyebrow: "Our story",
     title: "Built around the researcher",
     paragraphs: [
-      "Bio Resources supports Master's and Doctoral researchers who need access to advanced computational studies and in vitro work.",
+      `${company.companyName} supports Master's and Doctoral researchers who need access to advanced computational studies and in vitro work.`,
       "We offer a full range of life-science research services focused on cell-based studies and in vitro support, alongside natural-molecule-based drugs and nanomaterial drug delivery.",
       "The work is led by a scientist with academic training and research experience across computational biology, phytochemistry, nanotechnology and pharmaceutical biology, with a focus on medicinal plants.",
     ],
@@ -855,5 +855,5 @@ export const notFound = {
 
 export const footer = {
   blurb: company.description,
-  legal: `© ${new Date().getFullYear()} ${company.name}. All rights reserved.`,
+  legal: `© ${new Date().getFullYear()} ${company.companyName}. All rights reserved.`,
 };

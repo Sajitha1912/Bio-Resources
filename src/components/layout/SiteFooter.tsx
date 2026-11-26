@@ -9,10 +9,9 @@ import {
 } from 'framer-motion'
 import { company, contact, footer, nav } from '@/data/site'
 import { Container } from '@/components/ui/Container'
-import { Logo } from '@/components/ui/Logo'
 import { RegistrationBadge } from '@/components/ui/RegistrationBadge'
-import { LeafMark } from '@/components/motifs/LeafMark'
 import { LocationButton } from '@/components/location/LocationButton'
+import { BrandLockup } from '@/components/ui/BrandLockup'
 
 const CHANNEL_ICONS: Record<string, LucideIcon> = {
   Email: Mail,
@@ -32,7 +31,7 @@ export function SiteFooter() {
   // Reveals the coloured fill from left to right as the wordmark scrolls in.
   const inset = useTransform(scrollYProgress, [0.1, 0.75], [100, 0])
   const clipPath = useMotionTemplate`inset(0 ${inset}% 0 0)`
-  const wordmark = company.shortName.toUpperCase()
+  const wordmark = company.companyShort.toUpperCase()
 
   return (
     <footer className="border-t border-line">
@@ -41,22 +40,10 @@ export function SiteFooter() {
           <div className="sm:col-span-2">
             <Link
               to="/"
-              className="flex items-center gap-2.5"
-              aria-label={`${company.name} — home`}
+              className="min-w-0"
+              aria-label={`${company.companyName} — home`}
             >
-              <Logo
-                className="h-11"
-                fallback={
-                  <>
-                    <span className="size-8 shrink-0">
-                      <LeafMark />
-                    </span>
-                    <span className="font-heading text-lg font-medium">
-                      {company.shortName}
-                    </span>
-                  </>
-                }
-              />
+              <BrandLockup />
             </Link>
             <p className="mt-4 max-w-sm text-sm text-fg-muted">{footer.blurb}</p>
             <div className="mt-5">

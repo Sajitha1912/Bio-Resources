@@ -6,7 +6,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import { contact, contactPage, primaryPhone } from "@/data/site";
+import { company, contact, contactPage, primaryPhone } from "@/data/site";
 import { mapEmbedUrl, openInMapsUrl } from "@/lib/location";
 import { useSeo } from "@/lib/seo";
 import { PageHero } from "@/components/ui/PageHero";
@@ -43,6 +43,7 @@ export function ContactPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_1fr]">
             <div className="space-y-4">
+              <h2 className="font-heading text-2xl">{company.companyName}</h2>
               {email ? (
                 <Reveal>
                   <a

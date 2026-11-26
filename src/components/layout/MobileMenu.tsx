@@ -2,11 +2,10 @@ import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import { Phone, X } from 'lucide-react'
-import { company, contact, nav, primaryPhone } from '@/data/site'
+import { contact, nav, primaryPhone } from '@/data/site'
 import { useSmoothScroll } from '@/providers/smooth-scroll-context'
-import { LeafMark } from '@/components/motifs/LeafMark'
-import { Logo } from '@/components/ui/Logo'
 import { MagneticButton } from '@/components/ui/MagneticButton'
+import { BrandLockup } from '@/components/ui/BrandLockup'
 
 /** Full-screen animated navigation for small screens. */
 export function MobileMenu({
@@ -38,21 +37,7 @@ export function MobileMenu({
           transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
         >
           <div className="flex h-16 items-center justify-between px-5 sm:h-18">
-            <span className="flex items-center gap-2.5">
-              <Logo
-                className="h-11"
-                fallback={
-                  <>
-                    <span className="size-8 shrink-0">
-                      <LeafMark />
-                    </span>
-                    <span className="font-heading text-lg font-medium tracking-tight">
-                      {company.shortName}
-                    </span>
-                  </>
-                }
-              />
-            </span>
+            <BrandLockup />
             <button
               type="button"
               onClick={onClose}

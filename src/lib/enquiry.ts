@@ -27,7 +27,7 @@ function recipientEmail(): string {
 
 /** Builds a prefilled mailto: link from an enquiry. */
 export function buildMailto(payload: EnquiryPayload): string {
-  const subject = `New enquiry via the ${company.shortName} website`
+  const subject = `New enquiry via the ${company.companyShort} website`
   const body = [
     `Name: ${[payload.firstName, payload.lastName].filter(Boolean).join(' ')}`,
     `Email: ${payload.email}`,

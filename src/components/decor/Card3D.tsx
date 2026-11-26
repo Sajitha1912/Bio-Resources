@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { cn } from "@/lib/cn";
 import { FocusIllustration } from "./FocusIllustrations";
+import { CanvasErrorBoundary } from "@/three/CanvasErrorBoundary";
 
 const LazyCardCanvas = lazy(() =>
   import("@/three/cards/CardVisual3D").then((module) => ({
@@ -15,9 +16,11 @@ const LazyCardSlot = lazy(() =>
 
 export function Card3DCanvas() {
   return (
-    <Suspense fallback={null}>
-      <LazyCardCanvas />
-    </Suspense>
+    <CanvasErrorBoundary fallback={null}>
+      <Suspense fallback={null}>
+        <LazyCardCanvas />
+      </Suspense>
+    </CanvasErrorBoundary>
   );
 }
 
@@ -37,13 +40,22 @@ export function Card3DSlot({
     | "sprout"
     | "atom";
   const fallback = <FocusIllustration icon={icon} className="h-full w-full" />;
+  const staticFallback = (
+    <div className={cn("relative h-[200px] w-full", className)}>{fallback}</div>
+  );
   return (
-    <Suspense
-      fallback={
-        <div className={cn("card-3d-skeleton h-[200px] w-full", className)} />
-      }
-    >
-      <LazyCardSlot object={object} fallback={fallback} className={className} />
-    </Suspense>
+    <CanvasErrorBoundary fallback={staticFallback}>
+      <Suspense
+        fallback={
+          <div className={cn("card-3d-skeleton h-[200px] w-full", className)} />
+        }
+      >
+        <LazyCardSlot
+          object={object}
+          fallback={fallback}
+          className={className}
+        />
+      </Suspense>
+    </CanvasErrorBoundary>
   );
 }

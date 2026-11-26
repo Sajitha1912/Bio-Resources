@@ -13,7 +13,7 @@ import { SectionDivider } from "@/components/ui/SectionDivider";
 export function ServicesPage() {
   useSeo({
     title: servicesPage.hero.eyebrow,
-    description: `Services offered by ${company.name}. ${servicesPage.hero.subtitle}`,
+    description: `Services offered by ${company.companyName}. ${servicesPage.hero.subtitle}`,
     path: "/services",
   });
 

@@ -34,7 +34,7 @@ export function Logo({
   const image = (
     <img
       src={company.logo}
-      alt={company.name}
+      alt={company.companyName}
       width={192}
       height={48}
       decoding="async"

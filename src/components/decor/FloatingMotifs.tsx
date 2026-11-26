@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
@@ -67,31 +67,30 @@ export function FloatingMotifs({ className }: { className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const reduced = usePrefersReducedMotion()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current
     if (reduced || !root) return
 
-    const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-depth]'))
+    const ctx = gsap.context(() => {
+      const layers = Array.from(
+        root.querySelectorAll<HTMLElement>('[data-depth]'),
+      )
 
-    const tweens = layers.map((layer) =>
-      gsap.to(layer, {
-        yPercent: Number(layer.dataset.depth),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      }),
-    )
-
-    return () => {
-      tweens.forEach((tween) => {
-        tween.scrollTrigger?.kill()
-        tween.kill()
+      layers.forEach((layer) => {
+        gsap.to(layer, {
+          yPercent: Number(layer.dataset.depth),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: root,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
       })
-    }
+    }, root)
+
+    return () => ctx.revert()
   }, [reduced])
 
   return (

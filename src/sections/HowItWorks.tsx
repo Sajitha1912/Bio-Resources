@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { howItWorks } from '@/data/site'
@@ -29,7 +29,7 @@ export function HowItWorks() {
   /** Live scroll progress, read by the 3D helix every frame. */
   const progressRef = useRef(0)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!pinned) return
     const section = sectionRef.current
     if (!section) return

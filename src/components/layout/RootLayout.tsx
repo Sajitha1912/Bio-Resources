@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FilmGrain } from "@/components/ui/FilmGrain";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
@@ -16,6 +17,7 @@ import { useDocumentVisible } from "@/hooks/useDocumentVisible";
 export function RootLayout() {
   const [loaded, setLoaded] = useState(false);
   const handleLoaded = useCallback(() => setLoaded(true), []);
+  const location = useLocation();
 
   useDocumentVisible();
 
@@ -37,7 +39,9 @@ export function RootLayout() {
 
         <main id="main" className="relative z-10 flex-1">
           <PageTransition>
-            <Outlet />
+            <ErrorBoundary key={location.pathname}>
+              <Outlet />
+            </ErrorBoundary>
           </PageTransition>
         </main>
 

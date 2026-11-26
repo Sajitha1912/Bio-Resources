@@ -37,11 +37,10 @@ const NotFoundPage = lazy(() =>
   import('@/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
 )
 
-export default function App() {
+function AppRoutes() {
   return (
-    <BrowserRouter>
-      <ErrorBoundary>
-        <Routes>
+    <ErrorBoundary>
+      <Routes>
           <Route element={<RootLayout />}>
             <Route
               path="/"
@@ -92,8 +91,15 @@ export default function App() {
               }
             />
           </Route>
-        </Routes>
-      </ErrorBoundary>
+      </Routes>
+    </ErrorBoundary>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   )
 }

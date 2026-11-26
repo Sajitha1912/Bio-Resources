@@ -6,12 +6,11 @@ import { company, nav, primaryPhone } from '@/data/site'
 import { cn } from '@/lib/cn'
 import { useScrollInfo } from '@/hooks/useScrollInfo'
 import { Container } from '@/components/ui/Container'
-import { Logo } from '@/components/ui/Logo'
 import { MagneticButton } from '@/components/ui/MagneticButton'
-import { LeafMark } from '@/components/motifs/LeafMark'
 import { LocationButton } from '@/components/location/LocationButton'
 import { MobileMenu } from './MobileMenu'
 import { TopContactBar } from './TopContactBar'
+import { BrandLockup } from '@/components/ui/BrandLockup'
 
 /**
  * Sticky navbar: hides while scrolling down, reveals on scroll up, and picks
@@ -48,25 +47,18 @@ export function SiteHeader() {
       >
         <TopContactBar />
         <Container>
-          <div className="flex h-16 items-center justify-between gap-4 sm:h-18">
+          <div
+            className={cn(
+              'flex items-center justify-between gap-4 transition-[height] duration-300',
+              scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-18',
+            )}
+          >
             <Link
               to="/"
-              className="flex items-center gap-2.5"
-              aria-label={`${company.name} — home`}
+              className="min-w-0 shrink-0"
+              aria-label={`${company.companyName} — home`}
             >
-              <Logo
-                className="h-11 sm:h-12"
-                fallback={
-                  <>
-                    <span className="size-8 shrink-0">
-                      <LeafMark />
-                    </span>
-                    <span className="font-heading text-lg font-medium tracking-tight">
-                      {company.shortName}
-                    </span>
-                  </>
-                }
-              />
+              <BrandLockup compact={scrolled} />
             </Link>
 
             <nav
@@ -106,12 +98,12 @@ export function SiteHeader() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <span className="hidden sm:block">
+              <span className="hidden lg:block">
                 <LocationButton />
               </span>
 
               {primaryPhone?.href ? (
-                <span className="hidden sm:block">
+                <span className="hidden lg:block">
                   <MagneticButton
                     href={primaryPhone.href}
                     ariaLabel={`Call ${primaryPhone.value}`}

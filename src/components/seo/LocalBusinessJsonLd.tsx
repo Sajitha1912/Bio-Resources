@@ -19,8 +19,8 @@ export function LocalBusinessJsonLd() {
     const data = {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      name: company.name,
-      legalName: company.name,
+      name: company.companyName,
+      legalName: company.companyName,
       description: company.description,
       url: company.url,
       email: emailChannel?.value,
